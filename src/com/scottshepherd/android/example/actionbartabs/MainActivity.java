@@ -10,37 +10,30 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class MainActivity extends SherlockFragmentActivity {
     public static int THEME = R.style.Theme_Sherlock;
-    public static int[] TAB_LABELS = new int[] {
-    	R.string.tab_label1,
-    	R.string.tab_label2,
-    	R.string.tab_label3
-    };
 
-    @SuppressWarnings("rawtypes")
-	public static Class[] FRAGMENT_CLASSES = new Class[] {
-    	Fragment1.class, 
-    	Fragment2.class, 
-    	Fragment3.class
-    };
-
-    @SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         setTheme(THEME); //Used for theme switching in samples
         super.onCreate(savedInstanceState);
 
+        // not necessary, since we're using the default view group
         // setContentView(R.layout.activity_main);
+        
+        addTab(R.string.tab_label1, Fragment1.class);
+        addTab(R.string.tab_label2, Fragment2.class);
+        addTab(R.string.tab_label3, Fragment3.class);
+    }
+        
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void addTab(int textId, Class<? extends Fragment> clz) {
+    	String text = (String) getText(textId);
+		ActionBar.Tab tab = getSupportActionBar().newTab();
+		tab.setText(text);
+		tab.setTabListener(new TabListener(this, text, clz));
+		getSupportActionBar().addTab(tab);
+	}
 
-        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        for (int i = 0; i < TAB_LABELS.length; i++) {
-            ActionBar.Tab tab = getSupportActionBar().newTab();
-            tab.setText(TAB_LABELS[i]);
-            tab.setTabListener(new TabListener(this, getString(TAB_LABELS[i]), FRAGMENT_CLASSES[i]));
-            getSupportActionBar().addTab(tab);
-        }
-    }    
-    
-    public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
+	public static class TabListener<T extends Fragment> implements ActionBar.TabListener {
         private Fragment mFragment;
         private final SherlockFragmentActivity mActivity;
         private final String mTag;
@@ -63,10 +56,7 @@ public class MainActivity extends SherlockFragmentActivity {
             // Check if the fragment is already initialized
             if (mFragment == null) {
                 // If not, instantiate and add it to the activity
-                mFragment = Fragment.instantiate(mActivity, mClass.getName());
-                if (null == mFragment) throw new RuntimeException("mFragment was null");
-                if (null == mTag) throw new RuntimeException("mTag was null");
-                
+                mFragment = Fragment.instantiate(mActivity, mClass.getName());                
                 ft.add(android.R.id.content, mFragment, mTag);
             } else {
                 // If it exists, simply attach it in order to show it
