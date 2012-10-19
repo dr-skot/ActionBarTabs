@@ -10,6 +10,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class MainActivity extends SherlockFragmentActivity {
     public static int THEME = R.style.Theme_Sherlock;
+    public static int VIEW_GROUP = android.R.id.content;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class MainActivity extends SherlockFragmentActivity {
             if (mFragment == null) {
                 // If not, instantiate and add it to the activity
                 mFragment = Fragment.instantiate(mActivity, mClass.getName());                
-                ft.add(android.R.id.content, mFragment, mTag);
+                ft.add(VIEW_GROUP, mFragment, mTag);
             } else {
                 // If it exists, simply attach it in order to show it
                 ft.attach(mFragment);
