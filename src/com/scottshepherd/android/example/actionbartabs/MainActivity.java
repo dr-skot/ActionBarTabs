@@ -24,12 +24,11 @@ public class MainActivity extends SherlockFragmentActivity {
         addTab(R.string.tab_label3, Fragment3.class);
     }
         
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void addTab(int textId, Class<? extends Fragment> clz) {
+	private <T extends Fragment> void addTab(int textId, Class<T> clz) {
     	String text = (String) getText(textId);
 		ActionBar.Tab tab = getSupportActionBar().newTab();
 		tab.setText(text);
-		tab.setTabListener(new TabListener(this, text, clz));
+		tab.setTabListener(new TabListener<T>(this, text, clz));
 		getSupportActionBar().addTab(tab);
 	}
 
